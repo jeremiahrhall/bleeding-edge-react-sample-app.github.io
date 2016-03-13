@@ -4,6 +4,7 @@ import Heading from '../atoms/Heading';
 import Link from '../atoms/Link';
 import Markdown from '../atoms/Markdown';
 import {State} from '../utils/actions';
+import Comment from './Comment';
 
 export default
 class Comments extends React.Component {
@@ -49,45 +50,7 @@ class Comments extends React.Component {
 
     return (
       <Box>
-        {this.props.comments.map((comment) => {
-          var replies = comment.replies || [];
-          return (
-            <Box
-              key={comment.id}
-              padding="0.5em"
-              margin="0.5em"
-              style={{
-                background: comment.score >= targetScore ? '#ffffaa' : '#efefef'
-              }}
-            >
-              <Box direction="row">
-                <Heading level="title">{comment.score_hidden ? '?' : comment.score}</Heading>
-                <Box margin={{right: "1em"}} />
-                <Box style={{maxWidth: '80em', lineHeight: '1.5'}}>
-                  <Markdown content={comment.body} />
-                </Box>
-              </Box>
-              <Box margin={{top: '0.5em'}} direction="row">
-                <span>
-                  by <Link to={`/user/${comment.author}`}>{comment.author}</Link>
-                </span>
-                <Box
-                  margin="0 1em"
-                  onClick={() => {
-                    State.setEditing({
-                      type: 'comment',
-                      id: comment.id,
-                    })
-                  }}
-                  style={{cursor: 'pointer'}}
-                >
-                  Reply
-                </Box>
-              </Box>
-              <Comments comments={replies} goodScoreThreshold={targetScore} />
-            </Box>
-          );
-        })}
+        {this.props.comments.map((comment) => <Comment key={comment.id} comment={comment} targetScore={targetScore} />)}
       </Box>
     );
   }
